@@ -8,7 +8,7 @@ export function pageMeta(title: string, description: string, path: string, image
     description,
     alternates: { canonical: path },
     openGraph: {
-      title: `${title} | ${site.name} Berlin`,
+      title: /lucky nails/i.test(title) ? title : `${title} | ${site.name} Berlin`,
       description,
       url: path,
       siteName: site.name,
@@ -16,7 +16,7 @@ export function pageMeta(title: string, description: string, path: string, image
       type: "website",
       images: [{ url: image, width: 1200, height: 630, alt: "Lucky Nails Berlin" }],
     },
-    twitter: { card: "summary_large_image", title: `${title} | ${site.name}`, description, images: [image] },
+    twitter: { card: "summary_large_image", title: /lucky nails/i.test(title) ? title : `${title} | ${site.name}`, description, images: [image] },
   };
 }
 
