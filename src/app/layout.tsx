@@ -29,7 +29,13 @@ export const metadata: Metadata = {
   title: { default: "Lucky Nails Berlin – Maniküre, Pediküre & Nageldesign in Friedrichshain", template: "%s | Lucky Nails Berlin" },
   description: "Lucky Nails in Berlin-Friedrichshain: professionelle Maniküre, Pediküre und kreatives Nageldesign. Jetzt online Termin buchen.",
   alternates: { canonical: "/" },
-  openGraph: { siteName: site.name, locale: "de_DE", type: "website", images: [{ url: img.og, width: 1200, height: 630 }] },
+  openGraph: {
+    siteName: site.name, locale: "de_DE", type: "website", url: "/",
+    title: "Lucky Nails Berlin – Nagelstudio in Friedrichshain",
+    description: "Maniküre, Pediküre & Nageldesign in Berlin-Friedrichshain. Jetzt online Termin buchen.",
+    images: [{ url: img.og, width: 1200, height: 630, type: "image/jpeg", alt: "Lucky Nails Berlin – Logo und Nagelstudio in Friedrichshain" }],
+  },
+  twitter: { card: "summary_large_image", title: "Lucky Nails Berlin – Nagelstudio in Friedrichshain", description: "Maniküre, Pediküre & Nageldesign in Berlin-Friedrichshain. Jetzt online Termin buchen.", images: [img.og] },
   robots: { index: true, follow: true },
 };
 
