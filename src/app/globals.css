@@ -1875,3 +1875,8 @@ html.n3d-zoomlock, html.n3d-zoomlock body { overflow: hidden !important; overscr
   .xm-bow { width: 52px; height: 38px; top: -4px; }
 }
 @media (prefers-reduced-motion: reduce) { .xm-la, .xm-lb { animation: none; } }
+
+/* Weihnachts-Hero: Xmas-Ebene liegt über Tag/Nacht-Bild, in beiden Modi sichtbar */
+.bg-wrap > .bg.bg-xmas, .bg-wrap > .bg.bg-xmas-vid { opacity: 1 !important; animation: none; }
+.bgm-xmas, .bgm-xmas-vid { opacity: 1 !important; }
+@media (prefers-reduced-motion: reduce) { .bg-xmas-vid, .bgm-xmas-vid { display: none !important; } }
