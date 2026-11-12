@@ -18,7 +18,7 @@ export default function Page() {
   return (
     <>
       <PgxFx />
-      <PgxHero src="/img/pgx-detail-hand.webp" mobile="/img/m/galerie.webp" alts={["/img/pgx-detail-schale.webp", "/img/salon-day-3.webp"]} alt="Nagelpflege im Lucky Nails Studio: Hände bei der Behandlung" pos="50% 45%" eyebrow="Inspiration" title="Galerie – Unsere Arbeiten" sub="Echte Fotos aus unserem Studio: Nägel, Handarbeit und Räume – nichts davon ist gestellt oder generiert." />
+      <PgxHero src="/img/pgx-detail-hand.webp" mobile="/img/m/galerie.webp" mobilePos="100% 40%" alts={["/img/pgx-detail-schale.webp", "/img/salon-day-3.webp"]} alt="Nagelpflege im Lucky Nails Studio: Hände bei der Behandlung" pos="50% 45%" eyebrow="Inspiration" title="Galerie – Unsere Arbeiten" sub="Echte Fotos aus unserem Studio: Nägel, Handarbeit und Räume – nichts davon ist gestellt oder generiert." />
       <PgxMarquee items={["Natur", "French", "Full Cover Farbe", ...nails.slice(3).map((n) => n.name), "Handarbeit", "Studio Friedrichshain"]} />
       <section className="on-dark" style={{ padding: "64px 0 80px" }} aria-label="Galerie">
         <div className="wrap">
