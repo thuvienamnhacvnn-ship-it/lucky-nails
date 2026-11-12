@@ -56,7 +56,7 @@ function petalPoints(L: number, W: number, thick: number, pointed: boolean, groo
       const b = (j / NB) * 2 - 1;
       let h = thick * Math.pow(Math.max(0, 1 - b * b), 0.55) * (0.55 + 0.45 * Math.sin(Math.PI * Math.min(1, a * 1.15)));
       if (groove) h -= groove * thick * (Math.exp(-Math.pow(b / 0.13, 2)) + 0.4 * Math.exp(-Math.pow((Math.abs(b) - 0.5) / 0.1, 2))) * Math.sin(Math.PI * Math.min(1, a * 0.95 + 0.05));
-      const x = b * w, y = a * L, z = -0.012 + Math.max(0, h) + curl * L * Math.pow(a, 2.4);
+      const x = b * w, y = a * L, z = 0.004 + Math.max(0, h) + curl * L * Math.pow(a, 2.4);
       const c = Math.cos(tilt), sn = Math.sin(tilt);
       pts.push(x, y * c - z * sn, y * sn + z * c + lift);
     }
@@ -141,11 +141,17 @@ export function buildDecor(kind: string, geo: THREE.BufferGeometry, env: THREE.T
       }
     };
     const S = f.size, n = f.petals;
-    const g = f.pointed ? 0.5 : 0;
-    // 3 Lagen: außen flach + groß, Mitte höher, innen steil/klein
-    for (let k = 0; k < n; k++) addPetal(S * 0.5, S * 0.5 * f.wide, S * 0.2, g * 0.5, 0.05, 0.1, 0, (k * Math.PI * 2) / n);
-    for (let k = 0; k < n; k++) addPetal(S * 0.38, S * 0.38 * f.wide, S * 0.22, g * 0.6, 0.12, 0.38, 0.015, ((k + 0.5) * Math.PI * 2) / n);
-    for (let k = 0; k < n; k++) addPetal(S * 0.22, S * 0.22 * f.wide, S * 0.22, g * 0.5, 0.25, 0.75, 0.035, ((k + 0.25) * Math.PI * 2) / n);
+    // Gel-Blüte wie im Foto: flache, grosse, duenne Blütenblätter (keine Kuppel), Rand leicht aufgebogen, Adern in den Blaettern
+    const th = S * 0.05;
+    if (f.pointed) {
+      // Poinsettia: 6 grosse spitze Blätter + 6 kleinere dazwischen, Spitzen leicht nach oben
+      for (let k = 0; k < n; k++) addPetal(S * 0.5, S * 0.5 * f.wide, th, 0.5, 0.05, 0.04, 0, (k * Math.PI * 2) / n);
+      for (let k = 0; k < n; k++) addPetal(S * 0.36, S * 0.36 * f.wide, th, 0.5, 0.07, 0.1, 0.012, ((k + 0.5) * Math.PI * 2) / n);
+    } else {
+      // runde Blätter (Plumeria/Gänseblümchen): grosse Blätter unten, kleinere obere Lage
+      for (let k = 0; k < n; k++) addPetal(S * 0.5, S * 0.5 * f.wide, th, 0.25, 0.03, 0.03, 0, (k * Math.PI * 2) / n);
+      for (let k = 0; k < n; k++) addPetal(S * 0.3, S * 0.3 * f.wide, th, 0.2, 0.04, 0.08, 0.01, ((k + 0.5) * Math.PI * 2) / n);
+    }
     const fg = new THREE.BufferGeometry();
     fg.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
     fg.setIndex(idx);
@@ -154,7 +160,7 @@ export function buildDecor(kind: string, geo: THREE.BufferGeometry, env: THREE.T
     mesh.frustumCulled = false;
     grp.add(mesh);
 
-    const bead = S * 0.06, cz = S * 0.27;
+    const bead = S * 0.036, cz = S * 0.05;
     const c = f.center ?? "gold3";
     const addBead = (x: number, y: number, rr: number, mat: THREE.Material = goldMat) => {
       const b = new THREE.Mesh(new THREE.SphereGeometry(rr, 20, 14), mat);
@@ -191,7 +197,7 @@ const ring = (n: number, cu: number, ct: number, ru: number, rt: number, r: numb
 
 const DECOR: Record<string, Spec> = {
   // Poinsettia: grosse spitze weisse Blütenblätter + Goldperlen-Cluster (Foto: Mitte des Nagels, fast Nagelbreite)
-  xmas3: { flowers: [{ u: 0.5, t: 0.5, size: 1.0, petals: 6, wide: 0.42, pointed: true, center: "gold5" }] },
+  xmas3: { flowers: [{ u: 0.5, t: 0.5, size: 1.65, petals: 6, wide: 0.5, pointed: true, center: "gold5" }] },
   // 1 Steine am Nagelbett-Bogen (Cuticle)
   strass1: { fill: true, gems: row(12, (k) => { const u = 0.07 + (0.86 * k) / 11; return [u, 0.12 - 0.09 * (2 * u - 1) ** 2]; }, 0.048) },
   // 2 Steine als U um das rosa Nagelbett, offen zur Spitze hin geschlossen durch die weisse Spitze (obere Halbellipse)
@@ -199,7 +205,7 @@ const DECOR: Record<string, Spec> = {
   // 3 Blüte (5 runde Blätter) an der Smile-Linie
   strass3: { flowers: [{ u: 0.5, t: 0.52, size: 0.72, petals: 5, wide: 0.62, center: "none" }] },
   // 4 Blüte mit Stein-Mitte
-  strass4: { flowers: [{ u: 0.5, t: 0.5, size: 0.78, petals: 6, wide: 0.5, center: "gems" }], gems: [[0.5, 0.5, 0.05, 0.19], [0.45, 0.56, 0.03, 0.17], [0.55, 0.56, 0.03, 0.17], [0.45, 0.44, 0.03, 0.17], [0.55, 0.44, 0.03, 0.17]] },
+  strass4: { flowers: [{ u: 0.5, t: 0.5, size: 0.78, petals: 6, wide: 0.5, center: "gems" }], gems: [[0.5, 0.5, 0.05, 0.075], [0.46, 0.55, 0.03, 0.07], [0.54, 0.55, 0.03, 0.07], [0.46, 0.45, 0.03, 0.07], [0.54, 0.45, 0.03, 0.07]] },
   // 5 Steine entlang der Smile-Linie
   strass5: { fill: true, gems: smileRow(13, 0.58, 0.12, 0.048) },
 };

@@ -222,9 +222,11 @@ export function makeHeroMaterials(): Record<string, THREE.MeshPhysicalMaterial[]
     g.quadraticCurveTo(w / 2, h * (y - dip), 0, h * y); g.closePath();
   };
   const smileEdge = (g: CanvasRenderingContext2D, w: number, h: number, y: number, dip: number) => {
-    g.save(); g.strokeStyle = "#e2b24e"; g.lineWidth = 7; g.lineCap = "round";
-    g.beginPath(); g.moveTo(0, h * y); g.quadraticCurveTo(w / 2, h * (y - dip), w, h * y); g.stroke();
-    g.restore();
+    if (!BUMP) {
+      g.save(); g.strokeStyle = "#e2b24e"; g.lineWidth = 7; g.lineCap = "round";
+      g.beginPath(); g.moveTo(0, h * y); g.quadraticCurveTo(w / 2, h * (y - dip), w, h * y); g.stroke();
+      g.restore();
+    }
     for (let k = 0; k < 40; k++) {
       const t = rnd(), x = t * w, yy = h * ((1 - t) * (1 - t) * y + 2 * t * (1 - t) * (y - dip) + t * t * y) + (rnd() - 0.5) * 26;
       g.fillStyle = rnd() > 0.5 ? "#f6d98a" : "#c08a2c"; const sz = 4 + rnd() * 9; g.beginPath(); g.moveTo(x, yy - sz); g.lineTo(x + sz * 0.8, yy + sz * 0.2); g.lineTo(x + sz * 0.1, yy + sz * 0.9); g.lineTo(x - sz * 0.7, yy + sz * 0.1); g.closePath(); g.fill();
@@ -286,7 +288,7 @@ export function makeHeroMaterials(): Record<string, THREE.MeshPhysicalMaterial[]
   const sheer = (g: CanvasRenderingContext2D, w: number, h: number) => vgrad(g, w, h, [[0, "#dc9f90"], [0.5, "#e8b8aa"], [1, "#edc2b5"]]);
   const tip = (g: CanvasRenderingContext2D, w: number, h: number, c0: string, c1: string, y: number, dip: number) => {
     const gr = g.createLinearGradient(0, 0, 0, h * y); gr.addColorStop(0, c0); gr.addColorStop(1, c1);
-    g.fillStyle = gr; smile(g, w, h, y, dip); g.fill(); smileEdge(g, w, h, y, dip);
+    if (!BUMP) { g.fillStyle = gr; smile(g, w, h, y, dip); g.fill(); } smileEdge(g, w, h, y, dip);
   };
   const RED: [string, string] = ["#8a1022", "#5d0816"], GREEN: [string, string] = ["#1f5238", "#133424"];
   const leaf = (g: CanvasRenderingContext2D, n: number, y0: number, y1: number, w: number, h: number) => {
@@ -365,10 +367,11 @@ export function makeHeroMaterials(): Record<string, THREE.MeshPhysicalMaterial[]
   const drip = (heavy: number) => artMat((g, w, h) => {
     milkyBase(g, w, h);
     const gr = g.createLinearGradient(0, 0, 0, h * 0.42); gr.addColorStop(0, "#5a0719"); gr.addColorStop(1, "#a01230");
-    g.fillStyle = gr; g.fillRect(0, 0, w, h * 0.42);
+    if (!BUMP) { g.fillStyle = gr; g.fillRect(0, 0, w, h * 0.42); }
     const xs = heavy ? [100, 256, 412] : [150, 362];
     xs.forEach((x, i) => {
       const len = h * (0.56 + rnd() * (heavy ? 0.22 : 0.14)), r = 78 + rnd() * 18;
+      if (BUMP) return; // grosse Farbflaeche + Tropfen liegen buendig (ein Guss), nur Spritzer sind erhaben
       g.fillStyle = "#8e0f2b"; g.beginPath(); g.moveTo(x - r * 1.5, h * 0.38); g.quadraticCurveTo(x - r * 0.5, h * 0.44, x - r * 0.45, h * 0.52); g.lineTo(x - r * 0.45, len); g.arc(x, len, r * 0.45, Math.PI, 0, true);
       g.lineTo(x + r * 0.45, h * 0.52); g.quadraticCurveTo(x + r * 0.5, h * 0.44, x + r * 1.5, h * 0.38); g.closePath(); g.fill();
       g.beginPath(); g.arc(x, len + r * 0.55, r * 0.58, 0, 7); g.fill();
