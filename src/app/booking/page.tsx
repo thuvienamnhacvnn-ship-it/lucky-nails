@@ -27,7 +27,7 @@ export default function Page() {
   return (
     <>
       <PgxFx />
-      <PgxHero src="/img/pgx-detail-schale.webp" alts={["/img/salon-day-2.webp", "/img/salon-day.webp"]} alt="Maniküre mit Schale und Pflegeprodukten im Studio" pos="50% 55%" eyebrow="In vier Schritten" title="Online Booking" sub="Buche deinen Termin ganz einfach und bequem online.">
+      <PgxHero src="/img/pgx-detail-schale.webp" mobile="/img/m/booking.webp" alts={["/img/salon-day-2.webp", "/img/salon-day.webp"]} alt="Maniküre mit Schale und Pflegeprodukten im Studio" pos="50% 55%" eyebrow="In vier Schritten" title="Online Booking" sub="Buche deinen Termin ganz einfach und bequem online.">
         <div className="pgx-actions">
           <BookingCTA variant="primary" label="Jetzt Termin buchen" />
         </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CalendarDays, Menu, Navigation } from "lucide-react";
+import { CalendarDays, Menu, Navigation, X } from "lucide-react";
 import { img } from "@/config/images";
 import { nav, site } from "@/config/site";
 import { InstagramIcon, TikTokIcon, WhatsAppIcon } from "./Icons";
@@ -76,8 +76,8 @@ export default function Header() {
             <a href={site.booking} target="_blank" rel="noopener noreferrer" className="hdr-mini">
               Termin
             </a>
-            <button className="burger" aria-label="Menü öffnen" aria-expanded={open} onClick={() => setOpen(true)}>
-              <Menu size={28} strokeWidth={1.6} />
+            <button className="burger" aria-label={open ? "Menü schließen" : "Menü öffnen"} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+              {open ? <X size={24} strokeWidth={1.8} /> : <Menu size={24} strokeWidth={1.8} />}
             </button>
           </div>
         </div>

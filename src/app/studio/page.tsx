@@ -31,7 +31,7 @@ export default function Page() {
   return (
     <>
       <PgxFx />
-      <PgxHero src="/img/pg-studio-wide.webp" alts={["/img/salon-day.webp", "/img/salon-day-2.webp"]} alt="Das Lucky Nails Studio in Berlin-Friedrichshain: Blick durch die Arbeitsplätze und die Lack-Wand" pos="40% 55%" eyebrow="Studio & Team" title="Über uns" sub="Leidenschaft für schöne Nägel – in entspannter Atmosphäre, mit Präzision, Kreativität und Liebe zum Detail." />
+      <PgxHero src="/img/pg-studio-wide.webp" mobile="/img/m/studio.webp" alts={["/img/salon-day.webp", "/img/salon-day-2.webp"]} alt="Das Lucky Nails Studio in Berlin-Friedrichshain: Blick durch die Arbeitsplätze und die Lack-Wand" pos="40% 55%" eyebrow="Studio & Team" title="Über uns" sub="Leidenschaft für schöne Nägel – in entspannter Atmosphäre, mit Präzision, Kreativität und Liebe zum Detail." />
       <PgxMarquee items={["Persönlicher Service", "Hochwertige Produkte", "Saubere Behandlung", "Handarbeit", "Entspannte Atmosphäre", "Berlin-Friedrichshain"]} />
 
       <section className="section on-ivory" aria-labelledby="intro-h">

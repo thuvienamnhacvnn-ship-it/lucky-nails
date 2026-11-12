@@ -5,10 +5,14 @@ import type { CSSProperties, ReactNode } from "react";
 // Bausteine des Unterseiten-Neuaufbaus (pgx): Hero, Marquee, Zähler, Schritte, Kachel.
 const d = (i: number, step = 80): CSSProperties => ({ "--d": `${i * step}ms` }) as CSSProperties;
 
-export function PgxHero({ src, alt, pos = "50% 50%", video, alts, eyebrow, title, sub, children }: { src: string; alt: string; pos?: string; video?: string; alts?: string[]; eyebrow?: string; title: string; sub?: string; children?: ReactNode }) {
+export function PgxHero({ src, mobile, mobilePos, alt, pos = "50% 50%", video, alts, eyebrow, title, sub, children }: { src: string; mobile?: string; mobilePos?: string; alt: string; pos?: string; video?: string; alts?: string[]; eyebrow?: string; title: string; sub?: string; children?: ReactNode }) {
   return (
     <section className="pgx-hero">
-      <div className="pgx-hero-bg" data-par="0.16">
+      <div className={`pgx-hero-bg${mobile ? " has-m" : ""}`} data-par="0.16">
+        {mobile && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img className="pgx-mob" src={mobile} alt={alt} width={1024} height={1536} fetchPriority="high" style={mobilePos ? { objectPosition: mobilePos } : undefined} />
+        )}
         <Image src={src} alt={alt} fill priority sizes="100vw" quality={80} style={{ objectPosition: pos }} />
         {!video && alts?.map((a, i) => (
           // eslint-disable-next-line @next/next/no-img-element

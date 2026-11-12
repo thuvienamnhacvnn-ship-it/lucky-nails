@@ -24,7 +24,7 @@ export default function Page() {
   return (
     <>
       <PgxFx />
-      <PgxHero src="/img/pg-pedi-wide.webp" alts={["/img/salon-day-3.webp", "/img/salon-day.webp"]} alt="Zwei Pediküre-Stühle im Lucky Nails Studio" pos="50% 50%" eyebrow="Zum Verschenken" title="Gutscheine" sub="Ein Geschenk, das Freude macht – erhältlich im Studio." />
+      <PgxHero src="/img/pg-pedi-wide.webp" mobile="/img/m/gutscheine.webp" mobilePos="100% 40%" alts={["/img/salon-day-3.webp", "/img/salon-day.webp"]} alt="Zwei Pediküre-Stühle im Lucky Nails Studio" pos="50% 50%" eyebrow="Zum Verschenken" title="Gutscheine" sub="Ein Geschenk, das Freude macht – erhältlich im Studio." />
       <PgxMarquee items={["Geschenkgutschein", "Zeit für schöne Nägel", "Im Studio erhältlich", "Lucky Nails Berlin"]} />
 
       <section className="on-dark gsf-sec" aria-labelledby="gs-h">

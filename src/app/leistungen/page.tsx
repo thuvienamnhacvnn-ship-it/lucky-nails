@@ -33,7 +33,7 @@ export default function Page() {
   return (
     <>
       <PgxFx />
-      <PgxHero src="/img/pg-pedi-wide.webp" alts={["/img/salon-day-2.webp", "/img/salon-day-3.webp"]} alt="Pediküre-Stühle im Lucky Nails Studio" pos="50% 60%" eyebrow="Preise & Pflege" title="Unsere Leistungen" sub="Professionelle Nagelpflege für schöne und gesunde Nägel – transparente Preise, direkt online buchbar." />
+      <PgxHero src="/img/pg-pedi-wide.webp" mobile="/img/m/leistungen.webp" alts={["/img/salon-day-2.webp", "/img/salon-day-3.webp"]} alt="Pediküre-Stühle im Lucky Nails Studio" pos="50% 60%" eyebrow="Preise & Pflege" title="Unsere Leistungen" sub="Professionelle Nagelpflege für schöne und gesunde Nägel – transparente Preise, direkt online buchbar." />
       <PgxMarquee items={words} />
       <Suspense fallback={null}>
         <LeistungenQuickNav />

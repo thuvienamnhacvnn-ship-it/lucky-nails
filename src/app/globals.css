@@ -1736,3 +1736,40 @@ main { overflow-x: clip; }
 .pgx-hero-bg .pgx-alt { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; animation: pgxAlt 18s ease-in-out infinite; pointer-events: none; }
 @keyframes pgxAlt { 0% { opacity: 0; } 8% { opacity: 1; } 33% { opacity: 1; } 41% { opacity: 0; } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .pgx-hero-bg .pgx-alt { display: none; } }
+
+/* ═══ Mobile v2 (Sếp 12.11): Hochformat-Banner, grosser 3D-Nagel mittig, Werkzeuge + Nagelliste im unteren Banner, Menue unter dem Header ═══ */
+.bgm, .pgx-mob { display: none; }
+@media (max-width: 767px) {
+  .hero { display: block !important; height: clamp(560px, calc(100svh - var(--header-h)), 920px) !important; }
+  .hero-art { position: absolute !important; inset: 0 !important; left: 0 !important; right: auto !important; bottom: auto !important; transform: none !important; width: 100% !important; height: 100% !important; order: 0 !important; }
+  .hero-art > .bg-wrap { position: absolute !important; inset: 0 !important; left: 0 !important; right: 0 !important; width: 100% !important; height: 100% !important; transform: none !important; aspect-ratio: auto !important; }
+  .bg-wrap > .bg, .bg-wrap > .bg-alt { display: none !important; }
+  .bgm { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; transition: opacity 0.9s var(--ease); }
+  .bgm-night { opacity: 0; }
+  .hero[data-mode="night"] .bgm-night { opacity: 1; }
+  .n3d-canvas { left: 4% !important; width: 92% !important; top: 34% !important; height: 44% !important; touch-action: pan-y !important; }
+  .n3d-podium, .n3d-orbit, .n3d-glow, .n3d-shadow, .n3d-ring, .n3d-floor, .hero-info, .hero-cta-m, .hm-soc, .hg-title { display: none !important; }
+  .hero-ui { position: absolute !important; left: 0 !important; right: 0 !important; bottom: 0 !important; top: auto !important; width: 100% !important; order: 0 !important; transform: none !important; padding: 64px 10px 12px !important; background: linear-gradient(180deg, rgba(20, 8, 6, 0) 0%, rgba(20, 8, 6, 0.8) 36%, rgba(20, 8, 6, 0.95) 100%) !important; z-index: 7; }
+  .hui { display: flex !important; flex-direction: column; gap: 10px; }
+  .hm-tools { order: 1; display: flex; gap: 14px; justify-content: center; }
+  .hm-menu { order: 2; }
+  .hg-row { order: 3; }
+  .mode-toggle { top: 12px !important; right: 12px !important; }
+
+  .pgx-hero { min-height: clamp(540px, 76svh, 760px) !important; }
+  .pgx-hero-bg.has-m > img:not(.pgx-mob), .pgx-hero-bg.has-m > .pgx-alt, .pgx-hero-bg.has-m > video, .pgx-hero-bg.has-m > span { display: none !important; }
+  .pgx-mob { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+}
+@media (max-width: 1023px) {
+  .burger { width: 42px; height: 42px; border: 1.5px solid var(--gold); border-radius: 50%; background: rgba(213, 167, 84, 0.1); }
+  .drawer-back { inset: var(--header-h) 0 0 0; z-index: 54; }
+  .drawer { inset: var(--header-h) 0 0 0; width: 100%; z-index: 55; padding: 18px 16px 24px; border-top: 1px solid rgba(213, 167, 84, 0.45); background: radial-gradient(ellipse at 50% 0%, #3a2214 0%, #1f0f09 70%); }
+  .drawer .drawer-grid { margin-top: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .drawer nav.drawer-grid a, .drawer nav.drawer-grid a:hover { display: flex; align-items: center; gap: 10px; height: auto; min-height: 62px; padding: 12px; border: 1px solid rgba(213, 167, 84, 0.32); border-radius: 14px; background: rgba(255, 244, 225, 0.05); font-size: 17px; color: var(--text-on-dark); }
+  .drawer nav.drawer-grid a.active { border-color: #e8b86c; background: linear-gradient(180deg, rgba(120, 70, 30, 0.6), rgba(60, 30, 15, 0.6)); color: #fff; }
+  .dg-ic { flex: none; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgba(213, 167, 84, 0.6); color: #e8c27a; }
+  .dg-tx { min-width: 0; line-height: 1.15; }
+  .dg-ch { margin-left: auto; opacity: 0.5; flex: none; }
+  .drawer-foot { padding-top: 22px; }
+  .drawer-foot address a { display: inline-flex; align-items: center; gap: 6px; }
+}
