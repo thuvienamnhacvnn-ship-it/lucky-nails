@@ -106,7 +106,7 @@ export default function HeroNail3D() {
     const geos: Record<string, THREE.BufferGeometry> = {
       almond: geo,
       almondLong: shapeGeo({ length: 2.5, halfWidth: 0.46, p: 1.55, t0: 0.32, arcTip: 0.55 }, 0.9),
-      square: shapeGeo({ length: 1.8, halfWidth: 0.5, p: 22, t0: 0.94, arc: 0.72, arcTip: 0.5, bend: 0.06, thick: 0.034, thin: 0.55 }, 1),
+      square: shapeGeo({ length: 1.8, halfWidth: 0.5, p: 14, t0: 0.9, end: 0.78, arc: 0.72, arcTip: 0.5, bend: 0.06, thick: 0.034, thin: 0.62 }, 1),
       stiletto: shapeGeo({ length: 2.8, halfWidth: 0.42, p: 1.2, t0: 0.22, arcTip: 0.5 }, 0.8),
     };
     const geoOf = (d: { shape?: string }) => geos[d.shape ?? "almond"];

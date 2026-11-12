@@ -21,11 +21,12 @@ export type NailParams = {
   ns: number; // Spalten quer
   rimSteps: number;
   thin: number; // Verjuengung der Wandstaerke zur freien Kante (0 = keine, 0.6 = 40 % der Dicke an der Spitze)
+  end: number; // Breite der geraden freien Kante (Anteil der Halbbreite, 0 = laeuft spitz/rund zu). Eckig: kein Zipfel/Deckel an der Spitze
 };
 
 export const defaultNail: NailParams = {
   length: 2.04, halfWidth: 0.5, arc: 1.08, arcTip: 0.62, bend: 0.12, thick: 0.032, t0: 0.45, p: 2.2, foot: 0.04,
-  nb: 110, nt: 140, ns: 150, rimSteps: 12, thin: 0.62,
+  nb: 110, nt: 140, ns: 150, rimSteps: 12, thin: 0.62, end: 0,
 };
 
 const sstep5 = (x: number) => { const t = Math.min(1, Math.max(0, x)); return t * t * t * (t * (t * 6 - 15) + 10); };
@@ -47,7 +48,9 @@ export function buildNailGeometry(p: NailParams = defaultNail) {
     const t1 = 0.3;
     if (t < t1) w = 1 - p.foot * Math.pow(1 - t / t1, 3);
     if (t > p.t0) {
-      const s = Math.min(1, (t - p.t0) / (1 - p.t0));
+      // end>0: Kurve endet bei Breite `end` -> echte gerade Kante, kein zu einem Punkt zulaufender "Deckel"
+      const smax = p.end > 0 ? Math.pow(1 - Math.pow(p.end, p.p), 1 / p.p) : 1;
+      const s = Math.min(1, (t - p.t0) / (1 - p.t0)) * smax;
       w *= Math.pow(Math.max(0, 1 - Math.pow(s, p.p)), 1 / p.p);
     }
     return p.halfWidth * w;
@@ -98,7 +101,7 @@ export function buildNailGeometry(p: NailParams = defaultNail) {
       P(t, sg, tmp);
       pos.push(tmp[0], tmp[1], tmp[2]);
       let n: THREE.Vector3;
-      if (i === nu) {
+      if (i === nu && p.end <= 0) {
         // Spitze: Grenzwert der Normalen = Normale der vorletzten Zeile in der Mitte
         n = normals[idxOut(nu - 1, Math.round(ns / 2))].clone();
       } else n = normalAt(i, j);
@@ -137,6 +140,7 @@ export function buildNailGeometry(p: NailParams = defaultNail) {
   const loop: [number, number][] = [];
   for (let j = 0; j <= ns; j++) loop.push([0, j]);
   for (let i = 1; i <= nu; i++) loop.push([i, ns]);
+  if (p.end > 0) for (let j = ns - 1; j >= 0; j--) loop.push([nu, j]); // gerade freie Kante
   for (let i = nu - 1; i >= 1; i--) loop.push([i, 0]);
   const L = loop.length;
   const lp = (k: number) => { const [i, j] = loop[(k + L) % L]; const o = idxOut(i, j); return new V(pos[o * 3], pos[o * 3 + 1], pos[o * 3 + 2]); };
