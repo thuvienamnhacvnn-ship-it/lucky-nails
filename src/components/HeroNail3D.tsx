@@ -11,6 +11,7 @@ import { NAIL_HOME } from "@/lib/nailPose";
 import { site } from "@/config/site";
 import { InstagramIcon, TikTokIcon, WhatsAppIcon } from "./Icons";
 import { makeHeroMaterials } from "@/lib/heroMaterials";
+import { buildDecor, disposeDecor } from "@/lib/nailDecor";
 import { dissolve, updateCatUniforms } from "@/lib/nailShaders";
 import { makeStudioEnv } from "@/lib/studioEnv";
 
@@ -104,11 +105,14 @@ export default function HeroNail3D() {
     };
     const geos: Record<string, THREE.BufferGeometry> = {
       almond: geo,
-      square: shapeGeo({ p: 7, t0: 0.8, arcTip: 0.6 }, 1),
-      stiletto: shapeGeo({ length: 2.7, halfWidth: 0.42, p: 1.15, t0: 0.15, arcTip: 0.5 }, 0.85),
+      almondLong: shapeGeo({ length: 2.5, halfWidth: 0.46, p: 1.55, t0: 0.32, arcTip: 0.55 }, 0.9),
+      square: shapeGeo({ length: 1.8, halfWidth: 0.5, p: 22, t0: 0.94, arc: 0.72, arcTip: 0.5, bend: 0.06, thick: 0.05 }, 1),
+      stiletto: shapeGeo({ length: 2.8, halfWidth: 0.42, p: 1.2, t0: 0.22, arcTip: 0.5 }, 0.8),
     };
     const geoOf = (d: { shape?: string }) => geos[d.shape ?? "almond"];
     const meshes = heroDesigns.map((d) => { const m = new THREE.Mesh(geoOf(d), mats[d.kind]); m.visible = false; scene.add(m); return m; });
+    // echte 3D-Applikationen (Strass, Blüten, Perlen) als Kinder des Nagels
+    const decors = heroDesigns.map((d, i) => { const dg = buildDecor(d.kind, geoOf(d), envB.texture); if (dg) meshes[i].add(dg); return dg; });
     const st: S[] = heroDesigns.map(() => ({ q: HOME.clone(), axis: new THREE.Vector3(0, 1, 0), speed: 0, touched: false }));
     const stretch = (m: THREE.Object3D, z = 1) => m.scale.setScalar(z * 0.8);
 
@@ -333,6 +337,9 @@ export default function HeroNail3D() {
         if (k >= 1) { phase = "idle"; dis = 0; points.visible = false; pMat.opacity = 0; }
       }
       dissolve.value = dis;
+      // Applikationen (Strass/Blueten) loesen sich mit dem Nagel auf, schweben nie allein
+      const df = Math.max(0, 1 - dis * 2.4);
+      decors.forEach((d) => { if (d) { d.scale.setScalar(Math.max(df, 0.0001)); d.visible = df > 0.02; } });
 
       if (points.visible) {
         const arr = pGeo.getAttribute("position") as THREE.BufferAttribute;
@@ -376,7 +383,7 @@ export default function HeroNail3D() {
       el.removeEventListener("wheel", wheel); el.removeEventListener("pointerdown", down); el.removeEventListener("pointermove", move);
       el.removeEventListener("pointerup", up); el.removeEventListener("pointercancel", up);
       el.removeEventListener("mouseenter", enter); el.removeEventListener("mouseleave", leave);
-      Object.values(geos).forEach((x) => x.dispose()); pGeo.dispose(); pMat.dispose(); dotTex.dispose();
+      decors.forEach((x) => x && disposeDecor(x)); Object.values(geos).forEach((x) => x.dispose()); pGeo.dispose(); pMat.dispose(); dotTex.dispose();
       Object.values(mats).flat().forEach((m) => { m.map?.dispose(); m.dispose(); });
       env.dispose(); envB.dispose(); renderer.dispose();
       if (cv.parentNode === el) el.removeChild(cv);
