@@ -6,7 +6,7 @@ import LeistungenQuickNav from "@/components/LeistungenQuickNav";
 import { PgxHero, PgxMarquee, PgxStats } from "@/components/Pgx";
 import { PgxRail } from "@/components/PgxClient";
 import PgxFx from "@/components/PgxFx";
-import PriceTable from "@/components/PriceTable";
+import PreislisteMenu from "@/components/PreislisteMenu";
 import SectionHead from "@/components/SectionHead";
 import ServiceGrid from "@/components/ServiceCard";
 import { realItems } from "@/config/gallery";
@@ -93,9 +93,7 @@ export default function Page() {
       <section className="section on-dark" aria-labelledby="pl-h">
         <div className="wrap">
           <SectionHead id="pl-h" eyebrow="Alle Preise in Euro" title={<>Unsere <span className="gold-text">Preisliste</span></>} />
-          <Suspense fallback={null}>
-            <PriceTable />
-          </Suspense>
+          <PreislisteMenu />
         </div>
       </section>
 

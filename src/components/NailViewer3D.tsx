@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { nails } from "@/config/nails";
+import { nails as allNails } from "@/config/nails";
+const nails = allNails.slice(0, 6); // 3D-Viewer: nur die 6 Basis-Designs (Materialien je Index)
 import { buildNailGeometry } from "@/lib/nailGeometry";
 import { makeMaterials } from "@/lib/nailMaterials";
 import { makeStudioEnv } from "@/lib/studioEnv";

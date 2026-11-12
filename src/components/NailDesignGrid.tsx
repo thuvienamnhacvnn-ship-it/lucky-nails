@@ -19,7 +19,7 @@ export default function NailDesignGrid({ price = false }: { price?: boolean }) {
             <b>{n.name}</b>
             <span>{n.desc}</span>
             <span className="foot">
-              {price ? <em>Neumodellage ab {n.price.neu}</em> : <em>Entdecken</em>}
+              {price ? <em>{n.price.neu.startsWith("auf") ? "Preis auf Anfrage" : `Neumodellage ab ${n.price.neu}`}</em> : <em>Entdecken</em>}
               <i aria-hidden>›</i>
             </span>
           </span>

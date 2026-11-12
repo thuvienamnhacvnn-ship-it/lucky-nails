@@ -34,7 +34,7 @@ export default function Home() {
       </section>
       <section className="section on-ivory" aria-labelledby="nd-h">
         <div className="wrap">
-          <SectionHead id="nd-h" eyebrow="Dein Stil" title="Unsere 6 Nail Designs" sub="Von natürlich bis Statement – finde deinen Lieblingslook." />
+          <SectionHead id="nd-h" eyebrow="Dein Stil" title="Unsere 9 Nail Designs" sub="Von natürlich bis Statement – finde deinen Lieblingslook." />
           <NailDesignGrid />
           <div style={{ textAlign: "center", marginTop: 40 }}>
             <Link href="/nail-designs" className="btn btn-wine">Alle Designs ansehen ›</Link>

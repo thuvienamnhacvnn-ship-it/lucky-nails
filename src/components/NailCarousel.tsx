@@ -69,7 +69,7 @@ export default function NailCarousel() {
       className="stage"
       role="region"
       aria-roledescription="Karussell"
-      aria-label="Unsere sechs Nail Designs"
+      aria-label="Unsere Nail Designs"
       tabIndex={0}
       onKeyDown={onKey}
       onMouseEnter={() => setPaused(true)}

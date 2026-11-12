@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const n = getNail(slug);
   if (!n) return {};
-  return pageMeta(`${n.name} Nails – ${n.en}`, `${n.long} Neumodellage ab ${n.price.neu}. Jetzt Termin bei Lucky Nails Berlin buchen.`, `/nail-designs/${n.slug}`, nailStill(n.nail));
+  return pageMeta(`${n.name} Nails – ${n.en}`, `${n.long} ${n.price.neu.startsWith("auf") ? "Preis auf Anfrage" : `Neumodellage ab ${n.price.neu}`}. Jetzt Termin bei Lucky Nails Berlin buchen.`, `/nail-designs/${n.slug}`, nailStill(n.nail));
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
