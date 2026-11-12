@@ -1,7 +1,7 @@
 // Designs der 3D-Galerie im Hero: genau die 6 Designs aus dem Menü des Salons (Preise/Detailseiten in config/nails.ts).
 // kind = Material-Schlüssel in lib/nailMaterials.makeHeroMaterials(); cats = Filter im linken Menü.
-export type HeroCat = "alle" | "french" | "glitzer" | "verlauf" | "minimal";
-export type HeroDesign = { id: string; name: string; kind: string; cats: HeroCat[]; slug?: string; cat?: boolean; bright?: boolean };
+export type HeroCat = "alle" | "french" | "glitzer" | "verlauf" | "minimal" | "xmas" | "strass" | "blood";
+export type HeroDesign = { id: string; name: string; kind: string; cats: HeroCat[]; slug?: string; cat?: boolean; bright?: boolean; shape?: "almond" | "square" | "stiletto" };
 
 export const HERO_CATS: { id: HeroCat; label: string }[] = [
   { id: "alle", label: "Alle Designs" },
@@ -9,6 +9,9 @@ export const HERO_CATS: { id: HeroCat; label: string }[] = [
   { id: "french", label: "French" },
   { id: "verlauf", label: "Verlauf (Ombre)" },
   { id: "glitzer", label: "Effekte" },
+  { id: "xmas", label: "Weihnachten" },
+  { id: "strass", label: "Ombré Strass" },
+  { id: "blood", label: "Blood Stiletto" },
 ];
 
 export const heroDesigns: HeroDesign[] = [
@@ -18,4 +21,8 @@ export const heroDesigns: HeroDesign[] = [
   { id: "babyboomer", name: "Babyboomer", kind: "baby", cats: ["verlauf"], slug: "babyboomer" },
   { id: "cat-rubin", name: "Cat Eye", kind: "cat0", cats: ["glitzer"], slug: "cat-eye", cat: true },
   { id: "chrome", name: "Chrome", kind: "chrome", cats: ["glitzer"], slug: "chrome", bright: true },
+  { id: "milky", name: "Milky Almond", kind: "milky", cats: ["minimal"] },
+  ...[1, 2, 3, 4, 5].map((n): HeroDesign => ({ id: `xmas-${n}`, name: `Weihnachten ${n}/5`, kind: `xmas${n}`, cats: ["xmas"], shape: "square" })),
+  ...[1, 2, 3, 4].map((n): HeroDesign => ({ id: `strass-${n}`, name: `Ombré Strass ${n}/4`, kind: `strass${n}`, cats: ["strass"], shape: "square" })),
+  ...[1, 2, 3, 4, 5].map((n): HeroDesign => ({ id: `blood-${n}`, name: `Blood Stiletto ${n}/5`, kind: `blood${n}`, cats: ["blood"], shape: "stiletto" })),
 ];

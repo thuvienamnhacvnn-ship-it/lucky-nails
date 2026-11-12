@@ -210,6 +210,137 @@ export function makeHeroMaterials(): Record<string, THREE.MeshPhysicalMaterial[]
     }
   }), gloss));
 
+
+  // ---- Neue Designs nach Kundenfotos (Sets = jeder Finger anders, Milky = ein Design fuer alle) ----
+  out.milky = pair(phys(canvasTex((g, w, h) => {
+    vgrad(g, w, h, [[0, "#f3e8e6"], [0.5, "#f8f2f1"], [1, "#fdfbfb"]]);
+  }), gloss));
+
+  const smile = (g: CanvasRenderingContext2D, w: number, h: number, y: number, dip: number) => {
+    g.beginPath(); g.moveTo(0, 0); g.lineTo(w, 0); g.lineTo(w, h * y);
+    g.quadraticCurveTo(w / 2, h * (y - dip), 0, h * y); g.closePath();
+  };
+  const smileEdge = (g: CanvasRenderingContext2D, w: number, h: number, y: number, dip: number) => {
+    g.save(); g.strokeStyle = "#e2b24e"; g.lineWidth = 7; g.lineCap = "round";
+    g.beginPath(); g.moveTo(0, h * y); g.quadraticCurveTo(w / 2, h * (y - dip), w, h * y); g.stroke();
+    g.restore();
+    for (let k = 0; k < 40; k++) {
+      const t = rnd(), x = t * w, yy = h * ((1 - t) * (1 - t) * y + 2 * t * (1 - t) * (y - dip) + t * t * y) + (rnd() - 0.5) * 26;
+      g.fillStyle = rnd() > 0.5 ? "#f3d27c" : "#b9852a"; g.beginPath(); g.arc(x, yy, 2 + rnd() * 3, 0, 7); g.fill();
+    }
+  };
+  const flake = (g: CanvasRenderingContext2D, cx: number, cy: number, R: number) => {
+    g.save(); g.strokeStyle = "rgba(255,255,255,0.97)"; g.lineCap = "round"; g.lineWidth = Math.max(2.5, R / 8);
+    for (let k = 0; k < 6; k++) {
+      const a = (k * Math.PI) / 3;
+      g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+      for (const d of [0.5, -0.5]) { g.moveTo(cx + Math.cos(a) * R * 0.55, cy + Math.sin(a) * R * 0.55); g.lineTo(cx + Math.cos(a + d) * R * 0.85, cy + Math.sin(a + d) * R * 0.85); }
+      g.stroke();
+    }
+    g.restore();
+  };
+  const dots = (g: CanvasRenderingContext2D, w: number, h: number, n: number, y0: number, y1: number) => specks(g, w, h, n, y0, y1, ["#ffffff"], 2.2, 5.5);
+  const nude = (g: CanvasRenderingContext2D, w: number, h: number) => vgrad(g, w, h, [[0, "#efc6bd"], [0.6, "#f3cfc6"], [1, "#f6d8cf"]]);
+  const gold = (g: CanvasRenderingContext2D, x: number, y: number, r: number) => {
+    const gr = g.createRadialGradient(x - r * 0.3, y - r * 0.3, 0, x, y, r);
+    gr.addColorStop(0, "#fff3b8"); gr.addColorStop(1, "#c8922e"); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+  };
+  const petalFlower = (g: CanvasRenderingContext2D, cx: number, cy: number, R: number, n: number, rot: number) => {
+    for (let p = 0; p < n; p++) {
+      g.save(); g.translate(cx, cy); g.rotate(rot + (p * Math.PI * 2) / n);
+      const gr = g.createLinearGradient(0, 0, 0, -R * 1.9);
+      gr.addColorStop(0, "#d9d3dc"); gr.addColorStop(0.5, "#ffffff"); gr.addColorStop(1, "#f1ecf3");
+      g.fillStyle = gr; g.beginPath(); g.ellipse(0, -R, R * 0.6, R, 0, 0, 7); g.fill();
+      g.strokeStyle = "rgba(160,150,170,0.7)"; g.lineWidth = 3; g.stroke();
+      g.strokeStyle = "rgba(190,180,200,0.6)"; g.lineWidth = 2; g.beginPath(); g.moveTo(0, -R * 0.2); g.lineTo(0, -R * 1.7); g.stroke();
+      g.restore();
+    }
+  };
+
+  // Weihnachten (5 Finger)
+  out.xmas1 = pair(phys(canvasTex((g, w, h) => {
+    nude(g, w, h); g.fillStyle = "#7d0b1e"; smile(g, w, h, 0.34, 0.14); g.fill(); smileEdge(g, w, h, 0.34, 0.14);
+    flake(g, 150, 150, 70); dots(g, w, h, 18, 0.05, 0.5);
+  }), gloss));
+  out.xmas2 = pair(phys(canvasTex((g, w, h) => {
+    nude(g, w, h); g.fillStyle = "#1b4a30"; smile(g, w, h, 0.34, 0.14); g.fill(); smileEdge(g, w, h, 0.34, 0.14);
+    dots(g, w, h, 40, 0.05, 0.8);
+  }), gloss));
+  out.xmas3 = pair(phys(canvasTex((g, w, h) => {
+    nude(g, w, h); petalFlower(g, 256, 430, 112, 6, 0.3);
+    gold(g, 232, 420, 16); gold(g, 282, 420, 16); gold(g, 257, 458, 16); dots(g, w, h, 16, 0.05, 0.3);
+  }), gloss));
+  out.xmas4 = pair(phys(canvasTex((g, w, h) => {
+    nude(g, w, h); g.fillStyle = "#7d0b1e"; smile(g, w, h, 0.16, 0.06); g.fill(); smileEdge(g, w, h, 0.16, 0.06);
+    g.fillStyle = "#1d5a38";
+    [[420, 56], [330, 82], [235, 106]].forEach(([y, hw]) => { g.beginPath(); g.moveTo(256, y - 100); g.lineTo(256 + hw, y); g.lineTo(256 - hw, y); g.closePath(); g.fill(); });
+    g.fillStyle = "#4d8a63"; g.fillRect(250, 560, 12, 44);
+    g.strokeStyle = "#f0c96a"; g.lineWidth = 4; g.beginPath(); g.moveTo(205, 400); g.lineTo(300, 350); g.lineTo(215, 290); g.lineTo(290, 250); g.stroke();
+    gold(g, 256, 650, 20); specks(g, w, h, 30, 0.2, 0.9, ["#f2cf7d"], 2, 4); dots(g, w, h, 14, 0.2, 0.9);
+  }), gloss));
+  out.xmas5 = pair(phys(canvasTex((g, w, h) => {
+    nude(g, w, h); g.fillStyle = "#7d0b1e"; smile(g, w, h, 0.3, 0.12); g.fill(); smileEdge(g, w, h, 0.3, 0.12);
+    g.strokeStyle = "#c7152e"; g.lineWidth = 11; g.lineCap = "round";
+    g.beginPath(); g.moveTo(256, 520); g.bezierCurveTo(150, 430, 150, 560, 256, 520); g.bezierCurveTo(362, 430, 362, 560, 256, 520); g.stroke();
+    g.beginPath(); g.moveTo(256, 520); g.lineTo(200, 640); g.moveTo(256, 520); g.lineTo(312, 640); g.stroke();
+    flake(g, 380, 150, 44); dots(g, w, h, 26, 0.1, 0.9);
+  }), gloss));
+
+  // Ombre + Strass (4 Finger)
+  const ombre = (g: CanvasRenderingContext2D, w: number, h: number) => vgrad(g, w, h, [[0, "#f0b9b4"], [0.5, "#f6d7d2"], [0.78, "#fbefeb"], [1, "#ffffff"]]);
+  const gem = (g: CanvasRenderingContext2D, x: number, y: number, r: number) => {
+    const cols = ["#ffffff", "#cfe6ff", "#ffd8ec", "#e6ffd8", "#fff0c8"];
+    const gr = g.createRadialGradient(x - r * 0.3, y - r * 0.3, 0, x, y, r);
+    gr.addColorStop(0, "#ffffff"); gr.addColorStop(0.55, cols[Math.floor(rnd() * cols.length)]); gr.addColorStop(1, "#9a9aa8");
+    g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    g.strokeStyle = "rgba(90,90,110,0.55)"; g.lineWidth = 1.5; g.stroke();
+  };
+  out.strass1 = pair(phys(canvasTex((g, w, h) => {
+    ombre(g, w, h);
+    for (let k = 0; k <= 22; k++) { const t = k / 22; gem(g, 22 + t * (w - 44), 330 - 90 * Math.sin(t * Math.PI), 11); }
+  }), gloss));
+  out.strass2 = pair(phys(canvasTex((g, w, h) => {
+    ombre(g, w, h);
+    const n = 34; for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2; gem(g, 256 + Math.cos(a) * 200, 560 + Math.sin(a) * 330, 11); }
+  }), gloss));
+  out.strass3 = pair(phys(canvasTex((g, w, h) => {
+    ombre(g, w, h); petalFlower(g, 256, 260, 78, 5, 0.1); gold(g, 256, 256, 14);
+  }), gloss));
+  out.strass4 = pair(phys(canvasTex((g, w, h) => {
+    ombre(g, w, h);
+    for (let k = 0; k <= 12; k++) { const t = k / 12; gem(g, 20 + t * (w - 40), 330 - 90 * Math.sin(t * Math.PI), 11); }
+    gem(g, 256, 520, 14); gem(g, 210, 560, 9); gem(g, 302, 560, 9);
+  }), gloss));
+
+  // Blood Stiletto (5 Finger): milchig-weiss + Blutspritzer / Tropfen
+  const milkyBase = (g: CanvasRenderingContext2D, w: number, h: number) => vgrad(g, w, h, [[0, "#e8e2ee"], [1, "#f4f0f6"]]);
+  const splat = (g: CanvasRenderingContext2D, x: number, y: number, r: number) => {
+    const cols = ["#8f1030", "#b3173f", "#d02a52", "#6f0b25"];
+    g.fillStyle = cols[Math.floor(rnd() * cols.length)];
+    g.beginPath(); g.ellipse(x, y, r, r * (0.7 + rnd() * 0.5), rnd() * 3, 0, 7); g.fill();
+    for (let k = 0; k < 6; k++) { const a = rnd() * 6.28, d = r * (1.1 + rnd() * 1.4); g.beginPath(); g.arc(x + Math.cos(a) * d, y + Math.sin(a) * d, r * (0.1 + rnd() * 0.22), 0, 7); g.fill(); }
+  };
+  const bloody = (n: number, dense: number) => pair(phys(canvasTex((g, w, h) => {
+    milkyBase(g, w, h);
+    for (let k = 0; k < n; k++) splat(g, 40 + rnd() * (w - 80), 60 + rnd() * (h - 120), 10 + rnd() * 34 * dense);
+    specks(g, w, h, 60, 0, 1, ["#b3173f", "#8f1030"], 1.5, 4);
+  }), gloss));
+  out.blood1 = bloody(7, 1);
+  out.blood2 = bloody(11, 1.2);
+  out.blood4 = bloody(5, 0.8);
+  out.blood5 = bloody(9, 1);
+  out.blood3 = pair(phys(canvasTex((g, w, h) => {
+    milkyBase(g, w, h);
+    const gr = g.createLinearGradient(0, 0, 0, h * 0.3); gr.addColorStop(0, "#5c0718"); gr.addColorStop(1, "#a3112f");
+    g.fillStyle = gr; g.fillRect(0, 0, w, h * 0.3);
+    [[70, 0.46, 30], [170, 0.62, 26], [270, 0.4, 34], [370, 0.7, 28], [450, 0.5, 24]].forEach(([x, e, r]) => {
+      g.fillStyle = "#8c0e28"; g.fillRect(x - r / 2, h * 0.28, r, h * e - h * 0.28);
+      g.beginPath(); g.arc(x, h * e, r / 2, 0, 7); g.fill();
+      g.fillStyle = "rgba(255,170,190,0.45)"; g.fillRect(x - r / 5, h * 0.3, r / 6, h * e - h * 0.34);
+    });
+    specks(g, w, h, 20, 0.3, 0.9, ["#b3173f"], 2, 6);
+  }), gloss));
+
   out.cat0 = makeCatVariants(1)[0];
   return out;
 }

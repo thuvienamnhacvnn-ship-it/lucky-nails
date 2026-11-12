@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, Gem, Circle, Droplets, Hand, LayoutGrid, Sparkles, RotateCcw, ZoomIn } from "lucide-react";
+import { ChevronLeft, ChevronRight, Gem, Gift, Circle, Droplets, Hand, LayoutGrid, Sparkles, RotateCcw, ZoomIn } from "lucide-react";
 import * as THREE from "three";
 import { HERO_CATS, heroDesigns, type HeroCat } from "@/config/heroDesigns";
 import { buildNailGeometry, defaultNail } from "@/lib/nailGeometry";
@@ -25,7 +25,7 @@ const T_OUT = 0.5, T_GAP = 0.15, T_IN = 0.6;
 const NP = 160;
 const ZMAX_DESK = 1.2, ZMAX_MOB = 1.8;
 const isMob = () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
-const ICONS: Record<HeroCat, typeof Gem> = { alle: LayoutGrid, french: Hand, glitzer: Sparkles, verlauf: Droplets, minimal: Circle };
+const ICONS: Record<HeroCat, typeof Gem> = { alle: LayoutGrid, french: Hand, glitzer: Sparkles, verlauf: Droplets, minimal: Circle, xmas: Gift, strass: Gem, blood: Droplets };
 
 type S = { q: THREE.Quaternion; axis: THREE.Vector3; speed: number; touched: boolean };
 const ease = (x: number) => 1 - Math.pow(1 - x, 3);
@@ -92,7 +92,23 @@ export default function HeroNail3D() {
       if (p.envMapIntensity !== undefined) p.envMapIntensity = Math.min(p.envMapIntensity, 0.6);
     });
     const geo = buildNailGeometry();
-    const meshes = heroDesigns.map((d) => { const m = new THREE.Mesh(geo, mats[d.kind]); m.visible = false; scene.add(m); return m; });
+    // Nagelformen: Mandel (Standard), eckig (square), spitz (stiletto) - gleiche Mitte wie die Mandelform
+    geo.computeBoundingBox();
+    const c0 = geo.boundingBox!.getCenter(new THREE.Vector3());
+    const shapeGeo = (pp: Partial<typeof defaultNail>, k: number) => {
+      const g2 = buildNailGeometry({ ...defaultNail, ...pp });
+      g2.scale(k, k, k); g2.computeBoundingBox();
+      const c = g2.boundingBox!.getCenter(new THREE.Vector3());
+      g2.translate(c0.x - c.x, c0.y - c.y, c0.z - c.z);
+      return g2;
+    };
+    const geos: Record<string, THREE.BufferGeometry> = {
+      almond: geo,
+      square: shapeGeo({ p: 7, t0: 0.8, arcTip: 0.6 }, 1),
+      stiletto: shapeGeo({ length: 2.7, halfWidth: 0.42, p: 1.15, t0: 0.15, arcTip: 0.5 }, 0.85),
+    };
+    const geoOf = (d: { shape?: string }) => geos[d.shape ?? "almond"];
+    const meshes = heroDesigns.map((d) => { const m = new THREE.Mesh(geoOf(d), mats[d.kind]); m.visible = false; scene.add(m); return m; });
     const st: S[] = heroDesigns.map(() => ({ q: HOME.clone(), axis: new THREE.Vector3(0, 1, 0), speed: 0, touched: false }));
     const stretch = (m: THREE.Object3D, z = 1) => m.scale.setScalar(z * 0.8);
 
@@ -119,12 +135,11 @@ export default function HeroNail3D() {
     camera.aspect = tw / th; camera.updateProjectionMatrix();
     dissolve.value = 0;
     const THUMB_Q = HOME.clone(); // gleiche Pose wie der große Nagel (Spitze unten-links, ~45°)
-    const thumbGeo = geo; // gleiche Form wie der große Nagel (Form von gestern)
-    const shots: string[] = [];
+        const shots: string[] = [];
     heroDesigns.forEach((d, i) => {
       meshes.forEach((m) => { m.visible = false; });
       const m = meshes[i];
-      const g0 = m.geometry; m.geometry = thumbGeo;
+      const g0 = m.geometry; m.geometry = geoOf(d);
       m.quaternion.copy(THUMB_Q); m.position.set(0, 0, 0); m.scale.set(1, 1, 1); m.visible = true; m.updateMatrixWorld(true);
       if (d.cat) updateCatUniforms(m, camera, key.position);
       renderer.clear(); renderer.render(scene, camera);
@@ -361,7 +376,7 @@ export default function HeroNail3D() {
       el.removeEventListener("wheel", wheel); el.removeEventListener("pointerdown", down); el.removeEventListener("pointermove", move);
       el.removeEventListener("pointerup", up); el.removeEventListener("pointercancel", up);
       el.removeEventListener("mouseenter", enter); el.removeEventListener("mouseleave", leave);
-      geo.dispose(); pGeo.dispose(); pMat.dispose(); dotTex.dispose();
+      Object.values(geos).forEach((x) => x.dispose()); pGeo.dispose(); pMat.dispose(); dotTex.dispose();
       Object.values(mats).flat().forEach((m) => { m.map?.dispose(); m.dispose(); });
       env.dispose(); envB.dispose(); renderer.dispose();
       if (cv.parentNode === el) el.removeChild(cv);
