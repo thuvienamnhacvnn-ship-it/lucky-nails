@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import XmasDecor from "@/components/XmasDecor";
 import { img } from "@/config/images";
 import { site } from "@/config/site";
 import { localBusinessJsonLd } from "@/lib/seo";
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="de" className={`${cinzel.variable} ${playfair.variable} ${cormorant.variable} ${mulish.variable}`}>
       <body>
         <a href="#main" className="skip">Zum Inhalt springen</a>
+        <XmasDecor />
         <Header />
         <main id="main">{children}</main>
         <Footer />
