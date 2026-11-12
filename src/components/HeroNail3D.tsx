@@ -23,7 +23,8 @@ const AUTO_MS = 6000;
 const RESUME_MS = 12000;
 const T_OUT = 0.5, T_GAP = 0.15, T_IN = 0.6;
 const NP = 160;
-const ZMAX = 1.2;
+const ZMAX_DESK = 1.2, ZMAX_MOB = 1.8;
+const isMob = () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
 const ICONS: Record<HeroCat, typeof Gem> = { alle: LayoutGrid, french: Hand, glitzer: Sparkles, verlauf: Droplets, marmor: Gem, blumen: Flower2, minimal: Circle, saison: Gift };
 
 type S = { q: THREE.Quaternion; axis: THREE.Vector3; speed: number; touched: boolean };
@@ -149,6 +150,17 @@ export default function HeroNail3D() {
     let phase: "idle" | "out" | "gap" | "in" = "idle", pt = 0;
     let lastSwitch = performance.now(), lastTouch = -1e9, touchedEver = false, dragging = false;
     let zoom = 1, zoomT = 1, pinch0 = 0, zoom0 = 1, spinning = false;
+    const ZMAX = () => (isMob() ? ZMAX_MOB : ZMAX_DESK);
+    // Beim Zoomen (Handy): Seite sperren, damit das Banner nicht nach unten wegrutscht
+    let locked = false;
+    const lockMove = (e: TouchEvent) => { e.preventDefault(); };
+    const setLock = (on: boolean) => {
+      if (on === locked) return;
+      locked = on;
+      document.documentElement.classList.toggle("n3d-zoomlock", on);
+      if (on) window.addEventListener("touchmove", lockMove, { passive: false });
+      else window.removeEventListener("touchmove", lockMove);
+    };
     const ptrs = new Map<number, { x: number; y: number }>();
     let px = 0, py = 0, sx = 0, sy = 0, st0 = 0, moved = 0;
 
@@ -166,7 +178,7 @@ export default function HeroNail3D() {
       go,
       reset: () => { const s = st[shown]; s.q.copy(HOME); s.speed = 0; s.touched = false; zoomT = 1; spinning = false; setSpinOn(false); setZoomOn(false); },
       spin: () => { spinning = !spinning; if (spinning) { st[shown].touched = true; touchedEver = true; lastTouch = performance.now(); } return spinning; },
-      zoom: () => { zoomT = zoomT > 1.05 ? 1 : ZMAX; lastTouch = performance.now(); touchedEver = true; return zoomT > 1.05; },
+      zoom: () => { zoomT = zoomT > 1.05 ? 1 : ZMAX(); lastTouch = performance.now(); touchedEver = true; return zoomT > 1.05; },
     };
 
     const spawnBurst = () => {
@@ -195,7 +207,7 @@ export default function HeroNail3D() {
     };
     const move = (e: PointerEvent) => {
       if (ptrs.has(e.pointerId)) ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      if (ptrs.size >= 2) { zoomT = Math.min(ZMAX, Math.max(1, zoom0 * pdist() / pinch0)); lastTouch = performance.now(); return; }
+      if (ptrs.size >= 2) { zoomT = Math.min(ZMAX(), Math.max(1, zoom0 * pdist() / pinch0)); lastTouch = performance.now(); return; }
       if (!dragging) return;
       const dx = e.clientX - px, dy = e.clientY - py;
       px = e.clientX; py = e.clientY;
@@ -210,7 +222,7 @@ export default function HeroNail3D() {
       lastTouch = performance.now();
     };
     const wheel = (e: WheelEvent) => {
-      const next = Math.min(ZMAX, Math.max(1, zoomT - e.deltaY * (e.ctrlKey ? 0.008 : 0.0015)));
+      const next = Math.min(ZMAX(), Math.max(1, zoomT - e.deltaY * (e.ctrlKey ? 0.008 : 0.0015)));
       if (next === zoomT && !e.ctrlKey) return; // am Anschlag: Seite scrollt normal weiter
       e.preventDefault(); zoomT = next; lastTouch = performance.now(); touchedEver = true; setZoomOn(next > 1.05);
     };
@@ -287,6 +299,7 @@ export default function HeroNail3D() {
       }
 
       zoom += (zoomT - zoom) * Math.min(1, dt * 10);
+      if (isMob()) { setLock(zoomT > 1.05); setZoomOn(zoomT > 1.05); }
       renderer.clear();
       meshes.forEach((m, i) => {
         if (i !== shown || !nailVisible) { m.visible = false; return; }
@@ -310,7 +323,7 @@ export default function HeroNail3D() {
     raf = requestAnimationFrame(loop);
 
     return () => {
-      cancelAnimationFrame(raf); ro.disconnect(); io.disconnect();
+      cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); setLock(false);
       el.removeEventListener("wheel", wheel); el.removeEventListener("pointerdown", down); el.removeEventListener("pointermove", move);
       el.removeEventListener("pointerup", up); el.removeEventListener("pointercancel", up);
       el.removeEventListener("mouseenter", enter); el.removeEventListener("mouseleave", leave);
