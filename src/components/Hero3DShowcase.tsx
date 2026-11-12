@@ -16,8 +16,8 @@ export default function Hero3DShowcase() {
           <img className="bg bg-day" src="/img/salon-day.webp" alt="" width={2560} height={1440} fetchPriority="high" />
           <img className="bg bg-alt bg-alt-1" src="/img/salon-day-2.webp" alt="" width={2560} height={1440} loading="lazy" />
           <img className="bg bg-alt bg-alt-2" src="/img/salon-day-3.webp" alt="" width={2560} height={1440} loading="lazy" />
-          <img className="bgm bgm-day" src="/img/m/home-day.webp" alt="" width={1024} height={1536} fetchPriority="high" />
-          <img className="bgm bgm-night" src="/img/m/home-night.webp" alt="" width={1024} height={1536} loading="lazy" />
+          <img className="bgm bgm-day" src="/img/m/home-day.webp?v=3" alt="" width={1024} height={1536} fetchPriority="high" />
+          <img className="bgm bgm-night" src="/img/m/home-night.webp?v=3" alt="" width={1024} height={1536} loading="lazy" />
           <img className="bg bg-night" src="/img/salon-night.webp" alt="" width={1920} height={1081} />
           {/* eslint-enable @next/next/no-img-element */}
           <HeroNailLoader />

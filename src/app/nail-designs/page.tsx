@@ -18,7 +18,7 @@ export default function Page() {
   return (
     <>
       <PgxFx />
-      <PgxHero src="/img/pgx-detail-schale.webp" mobile="/img/m/nail-designs.webp" alts={["/img/salon-day-2.webp", "/img/salon-day.webp"]} alt="Maniküre mit Schale und Pflegeprodukten im Studio" pos="50% 55%" eyebrow="Dein Stil" title="Nail Designs" sub="Sechs Stile für deinen Lieblingslook – von natürlich bis Statement." />
+      <PgxHero src="/img/pgx-detail-schale.webp" mobile="/img/m/nail-designs.webp?v=3" alts={["/img/salon-day-2.webp", "/img/salon-day.webp"]} alt="Maniküre mit Schale und Pflegeprodukten im Studio" pos="50% 55%" eyebrow="Dein Stil" title="Nail Designs" sub="Sechs Stile für deinen Lieblingslook – von natürlich bis Statement." />
       <PgxMarquee items={nails.map((n) => n.en)} />
       <section className="section on-dark" aria-labelledby="nd-h">
         <div className="wrap">

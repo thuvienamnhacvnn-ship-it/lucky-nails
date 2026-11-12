@@ -73,9 +73,9 @@ export default function HeroNail3D() {
     const env = makeStudioEnv(renderer);
     const envB = makeStudioEnv(renderer, true); // hellere Umgebung für Chrome (Rosé-Gold-Spiegel)
     scene.environment = env.texture;
-    scene.environmentIntensity = 0.6;
-    const key = new THREE.DirectionalLight(0xffe0b5, 1.0); key.position.set(2.5, 3, 4);
-    const rim = new THREE.DirectionalLight(0xffb9a4, 0.9); rim.position.set(-3, 2, -3);
+    scene.environmentIntensity = 0.5;
+    const key = new THREE.DirectionalLight(0xffe0b5, 0.5); key.position.set(2.5, 3, 4);
+    const rim = new THREE.DirectionalLight(0xffb9a4, 0.45); rim.position.set(-3, 2, -3);
     const fill = new THREE.DirectionalLight(0xfff1e6, 0.35); fill.position.set(-2, -2.5, 3);
     scene.add(key, rim, fill);
     const camera = new THREE.PerspectiveCamera(28, 0.9, 0.1, 50);
@@ -83,6 +83,14 @@ export default function HeroNail3D() {
 
     const mats = makeHeroMaterials();
     heroDesigns.forEach((d) => { if (d.bright) mats[d.kind].forEach((m) => { m.envMap = envB.texture; m.envMapIntensity = 0.7; }); });
+    // Sếp 12.11: weniger Glanz, weniger Lichtpunkte -> rauere Oberflaeche, schwaecheres Streiflicht
+    Object.values(mats).flat().forEach((m) => {
+      const p = m as THREE.MeshPhysicalMaterial;
+      p.roughness = Math.max(p.roughness ?? 0, 0.3);
+      if ("clearcoatRoughness" in p) p.clearcoatRoughness = Math.max(p.clearcoatRoughness ?? 0, 0.28);
+      if ("clearcoat" in p) p.clearcoat = Math.min(p.clearcoat ?? 0, 0.55);
+      if (p.envMapIntensity !== undefined) p.envMapIntensity = Math.min(p.envMapIntensity, 0.6);
+    });
     const geo = buildNailGeometry();
     const meshes = heroDesigns.map((d) => { const m = new THREE.Mesh(geo, mats[d.kind]); m.visible = false; scene.add(m); return m; });
     const st: S[] = heroDesigns.map(() => ({ q: HOME.clone(), axis: new THREE.Vector3(0, 1, 0), speed: 0, touched: false }));
@@ -142,7 +150,7 @@ export default function HeroNail3D() {
     renderer.setPixelRatio(PR);
     renderer.toneMappingExposure = 0.72;
     scene.environmentIntensity = 0.6;
-    key.intensity = 1.0;
+    key.intensity = 0.5;
     setThumbs(shots);
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -153,13 +161,24 @@ export default function HeroNail3D() {
     const ZMAX = () => (isMob() ? ZMAX_MOB : ZMAX_DESK);
     // Beim Zoomen (Handy): Seite sperren, damit das Banner nicht nach unten wegrutscht
     let locked = false;
-    const lockMove = (e: TouchEvent) => { e.preventDefault(); };
+    // Vuetschen ausserhalb des Nagels (nach unten/oben) = Rueckkehr: Zoom zurueck, Werkzeuge wieder sichtbar, Seite scrollt wieder
+    let t0: { y: number; inside: boolean } | null = null;
+    const lockStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) { t0 = null; return; }
+      t0 = { y: e.touches[0].clientY, inside: el.contains(e.target as Node) };
+    };
+    const lockMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (t0 && !t0.inside && e.touches.length === 1 && Math.abs(e.touches[0].clientY - t0.y) > 36) {
+        t0 = null; zoomT = 1; setLock(false); setZoomOn(false);
+      }
+    };
     const setLock = (on: boolean) => {
       if (on === locked) return;
       locked = on;
       document.documentElement.classList.toggle("n3d-zoomlock", on);
-      if (on) window.addEventListener("touchmove", lockMove, { passive: false });
-      else window.removeEventListener("touchmove", lockMove);
+      if (on) { window.addEventListener("touchstart", lockStart, { passive: true }); window.addEventListener("touchmove", lockMove, { passive: false }); }
+      else { window.removeEventListener("touchstart", lockStart); window.removeEventListener("touchmove", lockMove); }
     };
     const ptrs = new Map<number, { x: number; y: number }>();
     let px = 0, py = 0, sx = 0, sy = 0, st0 = 0, moved = 0;

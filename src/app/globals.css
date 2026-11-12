@@ -1790,3 +1790,11 @@ main { overflow-x: clip; }
   .apptabs a:active, .apptabs button:active { color: #fff3d2; }
 }
 html.n3d-zoomlock, html.n3d-zoomlock body { overflow: hidden !important; overscroll-behavior: none; touch-action: none; }
+
+/* Zoom (Handy): Nagel rutscht tiefer, Werkzeuge blenden aus und kommen beim Wegwischen zurueck */
+@media (max-width: 767px) {
+  .hero-ui { transition: opacity 0.3s var(--ease), transform 0.3s var(--ease) !important; }
+  .n3d-canvas { transition: top 0.35s var(--ease); }
+  html.n3d-zoomlock .hero-ui { opacity: 0; pointer-events: none !important; transform: translateY(24px) !important; }
+  html.n3d-zoomlock .n3d-canvas { top: 24% !important; }
+}

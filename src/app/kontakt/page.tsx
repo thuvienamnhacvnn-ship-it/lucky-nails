@@ -29,7 +29,7 @@ export default function Page() {
   return (
     <>
       <PgxFx />
-      <PgxHero src="/img/fassade-video-poster.webp" mobile="/img/m/kontakt.webp" video="/video/fassade-lucky.mp4" alt="Das Lucky Nails Studio an der Boxhagener Straße in Berlin-Friedrichshain" pos="50% 8%" eyebrow="Besuch uns" title="Kontakt & Termin buchen" sub="Wir freuen uns auf deinen Besuch in Berlin-Friedrichshain.">
+      <PgxHero src="/img/fassade-video-poster.webp" mobile="/img/m/kontakt.webp?v=3" video="/video/fassade-lucky.mp4" alt="Das Lucky Nails Studio an der Boxhagener Straße in Berlin-Friedrichshain" pos="50% 8%" eyebrow="Besuch uns" title="Kontakt & Termin buchen" sub="Wir freuen uns auf deinen Besuch in Berlin-Friedrichshain.">
         <div className="pgx-actions">
           <BookingCTA variant="primary" label="Jetzt Termin buchen" chevron={false} />
           <a className="btn btn-outline" href={`tel:${site.phone.tel}`}>
