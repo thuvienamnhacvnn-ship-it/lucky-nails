@@ -45,10 +45,10 @@ export function PgCard({
   );
   return href ? (
     <Link href={href} className="pgk-card link pgx-tilt pgx-edge" data-r style={{ "--d": `${i * 90}ms` } as React.CSSProperties}>
-      {body}
+      <i className="snowcap" aria-hidden />{body}
     </Link>
   ) : (
-    <div className="pgk-card pgx-tilt pgx-edge" data-r style={{ "--d": `${i * 90}ms` } as React.CSSProperties}>{body}</div>
+    <div className="pgk-card pgx-tilt pgx-edge" data-r style={{ "--d": `${i * 90}ms` } as React.CSSProperties}><i className="snowcap" aria-hidden />{body}</div>
   );
 }
 
@@ -57,6 +57,7 @@ export function PgTrio({ items }: { items: { Icon: React.ComponentType<{ "aria-h
     <div className="pgk-trio">
       {items.map(({ Icon, h, p }) => (
         <div key={h} className="pgk-card feat pgx-tilt pgx-edge" data-r>
+          <i className="snowcap" aria-hidden />
           <Icon aria-hidden />
           <h3>{h}</h3>
           <p>{p}</p>
