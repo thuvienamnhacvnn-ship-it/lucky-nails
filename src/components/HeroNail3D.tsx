@@ -196,10 +196,14 @@ export default function HeroNail3D() {
     };
 
     const pdist = () => { const a = [...ptrs.values()]; return Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y) || 1; };
+    // 2 Finger: gleichzeitig zoomen (Abstand), drehen (Mittelpunkt wandert) und rollen (Finger verdrehen)
+    let mid0 = { x: 0, y: 0 }, ang0 = 0;
+    const pmid = () => { const a = [...ptrs.values()]; return { x: (a[0].x + a[1].x) / 2, y: (a[0].y + a[1].y) / 2 }; };
+    const pang = () => { const a = [...ptrs.values()]; return Math.atan2(a[1].y - a[0].y, a[1].x - a[0].x); };
     const down = (e: PointerEvent) => {
-      el.setPointerCapture(e.pointerId);
+      try { el.setPointerCapture(e.pointerId); } catch {}
       ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      if (ptrs.size >= 2) { dragging = false; touchedEver = true; lastTouch = performance.now(); pinch0 = pdist(); zoom0 = zoomT; moved = 999; return; }
+      if (ptrs.size >= 2) { dragging = false; touchedEver = true; lastTouch = performance.now(); pinch0 = pdist(); zoom0 = zoomT; moved = 999; mid0 = pmid(); ang0 = pang(); const s2 = st[shown]; s2.speed = 0; s2.touched = true; return; }
       dragging = true; touchedEver = true; lastTouch = performance.now();
       px = sx = e.clientX; py = sy = e.clientY; st0 = performance.now(); moved = 0;
       const s = st[shown]; s.speed = 0; s.touched = true;
@@ -207,7 +211,18 @@ export default function HeroNail3D() {
     };
     const move = (e: PointerEvent) => {
       if (ptrs.has(e.pointerId)) ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      if (ptrs.size >= 2) { zoomT = Math.min(ZMAX(), Math.max(1, zoom0 * pdist() / pinch0)); lastTouch = performance.now(); return; }
+      if (ptrs.size >= 2) {
+        zoomT = Math.min(ZMAX(), Math.max(1, zoom0 * pdist() / pinch0));
+        const m = pmid(), a = pang(), s2 = st[shown];
+        const dx2 = m.x - mid0.x, dy2 = m.y - mid0.y;
+        let da = a - ang0; if (da > Math.PI) da -= 2 * Math.PI; if (da < -Math.PI) da += 2 * Math.PI;
+        mid0 = m; ang0 = a;
+        const l2 = Math.hypot(dx2, dy2);
+        if (l2 > 0.01) s2.q.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(dy2, dx2, 0).normalize(), l2 * 0.012)).normalize();
+        if (Math.abs(da) > 0.0005) s2.q.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), -da)).normalize();
+        s2.speed = 0; s2.touched = true;
+        lastTouch = performance.now(); return;
+      }
       if (!dragging) return;
       const dx = e.clientX - px, dy = e.clientY - py;
       px = e.clientX; py = e.clientY;
