@@ -1773,3 +1773,19 @@ main { overflow-x: clip; }
   .drawer-foot { padding-top: 22px; }
   .drawer-foot address a { display: inline-flex; align-items: center; gap: 6px; }
 }
+
+/* ═══ Mobile App-Leiste (Sếp 12.11): Header = App-Menue, kein Logo ═══ */
+.apptabs { display: none; }
+@media (max-width: 767px) {
+  :root { --header-h: 62px; }
+  .hdr, .hdr.scrolled { height: var(--header-h); background: rgba(26, 12, 9, 0.97); }
+  .hdr-in { padding-inline: 6px; display: block; }
+  .hdr .logo, .hdr .hdr-logo-hit, .hdr .nav, .hdr .hdr-right { display: none !important; }
+  .apptabs { display: grid; grid-template-columns: repeat(5, 1fr); height: 100%; align-items: stretch; }
+  .apptabs a, .apptabs button { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #cdb892; font-size: 11px; letter-spacing: 0.02em; font-weight: 600; background: none; border: 0; padding: 0; cursor: pointer; transition: color 0.2s; -webkit-tap-highlight-color: transparent; }
+  .apptabs svg { transition: transform 0.2s; }
+  .apptabs a.on, .apptabs button.on { color: #f7dfa0; }
+  .apptabs a.on svg, .apptabs button.on svg { transform: translateY(-1px) scale(1.08); }
+  .apptabs a.on::before, .apptabs button.on::before { content: ""; position: absolute; top: 0; left: 24%; right: 24%; height: 3px; border-radius: 0 0 4px 4px; background: linear-gradient(90deg, #b98440, #f7dfa0, #b98440); }
+  .apptabs a:active, .apptabs button:active { color: #fff3d2; }
+}

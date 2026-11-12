@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CalendarDays, Menu, Navigation, X } from "lucide-react";
+import { CalendarDays, Ellipsis, House, Images, Menu, Navigation, Sparkles, X } from "lucide-react";
 import { img } from "@/config/images";
 import { nav, site } from "@/config/site";
 import { InstagramIcon, TikTokIcon, WhatsAppIcon } from "./Icons";
@@ -60,6 +60,21 @@ export default function Header() {
                 {n.label}
               </Link>
             ))}
+          </nav>
+          <nav className="apptabs" aria-label="App-Navigation">
+            {[
+              { href: "/", label: "Home", icon: <House size={22} strokeWidth={1.7} /> },
+              { href: "/leistungen", label: "Leistungen", icon: <Sparkles size={22} strokeWidth={1.7} /> },
+              { href: "/galerie", label: "Galerie", icon: <Images size={22} strokeWidth={1.7} /> },
+              { href: "/booking", label: "Booking", icon: <CalendarDays size={22} strokeWidth={1.7} /> },
+            ].map((t) => (
+              <Link key={t.href} href={t.href} className={isActive(path, t.href) ? "on" : ""} aria-current={isActive(path, t.href) ? "page" : undefined}>
+                {t.icon}<span>{t.label}</span>
+              </Link>
+            ))}
+            <button type="button" className={open ? "on" : ""} aria-expanded={open} aria-label={open ? "Menü schließen" : "Mehr Menü öffnen"} onClick={() => setOpen((v) => !v)}>
+              {open ? <X size={22} strokeWidth={1.7} /> : <Ellipsis size={22} strokeWidth={1.7} />}<span>Mehr</span>
+            </button>
           </nav>
           <div className="hdr-right">
             <a href={site.mapsLink} target="_blank" rel="noopener noreferrer" className="hdr-route" aria-label="Route zum Studio planen (Google Maps)">
