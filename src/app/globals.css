@@ -1887,7 +1887,7 @@ html.n3d-zoomlock, html.n3d-zoomlock body { overflow: hidden !important; overscr
 }
 .snowcap, .pgx-nd::after, .pl-card::before, .hm-menu::before {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; z-index: 6; pointer-events: none;
-  background: var(--snow) repeat-x 0 0 / 120px 20px; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+  background: var(--snow) repeat-x 0 0 / 120px 20px;
 }
 .snowcap { display: block; }
 .pl-card::before { height: 26px; background-size: 150px 25px; z-index: 3; }
@@ -1902,3 +1902,7 @@ html.n3d-zoomlock, html.n3d-zoomlock body { overflow: hidden !important; overscr
 @media (max-width: 767px) { .hm-menu::before { display: none; } }
 @media print { .snowcap, .btn::before { display: none; } }
 .pgx-nd { position: relative; }
+
+/* Performance: unter dem Xmas-Bild liegende Ebenen (Tag/Nacht/Alt-Crossfade 2560px) nicht mehr rendern/animieren */
+.bg-wrap:has(.bg-xmas) > .bg:not(.bg-xmas):not(.bg-xmas-vid), .bg-wrap:has(.bg-xmas) > .bgm:not(.bgm-xmas):not(.bgm-xmas-vid) { display: none !important; }
+.xm-la, .xm-lb { will-change: opacity; }

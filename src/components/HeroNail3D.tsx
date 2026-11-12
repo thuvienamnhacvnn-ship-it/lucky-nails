@@ -60,7 +60,7 @@ export default function HeroNail3D() {
       setFallback(true);
       return;
     }
-    const PR = Math.min(Math.max(window.devicePixelRatio, 1.5), 2);
+    const PR = Math.min(Math.max(window.devicePixelRatio, 1), 1.5);
     renderer.setPixelRatio(PR);
     renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;

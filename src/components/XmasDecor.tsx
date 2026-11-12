@@ -97,19 +97,25 @@ export default function XmasDecor() {
     const g = c.getContext("2d");
     if (!g) return;
     let w = 0, h = 0, raf = 0;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const dpr = 1; // Schnee ist weich: 1x reicht
     const resize = () => { w = window.innerWidth; h = window.innerHeight; c.width = w * dpr; c.height = h * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0); };
     resize();
-    const N = w < 700 ? 38 : 80;
+    const N = w < 700 ? 30 : 60;
     const fl = Array.from({ length: N }, () => ({ x: Math.random() * w, y: Math.random() * h, r: 1 + Math.random() * 2.6, v: 18 + Math.random() * 34, s: Math.random() * 6.28, a: 0.4 + Math.random() * 0.5 }));
     let last = performance.now();
     const tick = (now: number) => {
       const dt = Math.min(0.1, (now - last) / 1000); last = now;
       g.clearRect(0, 0, w, h);
-      for (const f of fl) {
-        f.y += f.v * dt; f.s += dt * 0.9; f.x += Math.sin(f.s) * 12 * dt;
-        if (f.y > h + 6) { f.y = -6; f.x = Math.random() * w; }
-        g.globalAlpha = f.a; g.fillStyle = "#fff"; g.beginPath(); g.arc(f.x, f.y, f.r, 0, 6.283); g.fill();
+      g.fillStyle = "#fff";
+      for (let b = 0; b < 3; b++) { // 3 Alpha-Stufen, je ein Pfad statt Einzelpfade
+        g.globalAlpha = 0.45 + b * 0.22; g.beginPath();
+        for (let i = b; i < fl.length; i += 3) {
+          const f = fl[i];
+          f.y += f.v * dt; f.s += dt * 0.9; f.x += Math.sin(f.s) * 12 * dt;
+          if (f.y > h + 6) { f.y = -6; f.x = Math.random() * w; }
+          g.moveTo(f.x + f.r, f.y); g.arc(f.x, f.y, f.r, 0, 6.283);
+        }
+        g.fill();
       }
       g.globalAlpha = 1;
       raf = requestAnimationFrame(tick);
