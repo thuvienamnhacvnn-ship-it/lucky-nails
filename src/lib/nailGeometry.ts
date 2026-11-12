@@ -114,7 +114,7 @@ export function buildNailGeometry(p: NailParams = defaultNail) {
     for (let j = 0; j <= ns; j++) {
       const sg = -1 + (2 * j) / ns;
       const k = idxOut(i, j);
-      const th = p.thick * (0.96 + 0.08 * (1 - sg * sg)) * (1 - 0.2 * t * t) * (1 - p.thin * sstep5((t - 0.5) / 0.5));
+      const th = p.thick * (0.96 + 0.08 * (1 - sg * sg)) * (1 - 0.2 * t * t) * (1 - p.thin * sstep5((t - 0.5) / 0.5)) * (0.4 + 0.6 * sstep5(t / 0.14));
       const n = normals[k];
       pos.push(pos[k * 3] - n.x * th, pos[k * 3 + 1] - n.y * th, pos[k * 3 + 2] - n.z * th);
       nor.push(-n.x, -n.y, -n.z);
@@ -151,7 +151,7 @@ export function buildNailGeometry(p: NailParams = defaultNail) {
     const T = lp(k + 2).sub(lp(k - 2)).normalize();
     const b = new V().crossVectors(T, n).normalize();
     const O = new V(pos[o * 3], pos[o * 3 + 1], pos[o * 3 + 2]);
-    const th = p.thick * (0.96 + 0.08 * (1 - (-1 + (2 * j) / ns) ** 2)) * (1 - 0.2 * rowT(i) ** 2) * (1 - p.thin * sstep5((rowT(i) - 0.5) / 0.5));
+    const th = p.thick * (0.96 + 0.08 * (1 - (-1 + (2 * j) / ns) ** 2)) * (1 - 0.2 * rowT(i) ** 2) * (1 - p.thin * sstep5((rowT(i) - 0.5) / 0.5)) * (0.4 + 0.6 * sstep5(rowT(i) / 0.14));
     const r = th / 2;
     const C = O.clone().addScaledVector(n, -r);
     for (let m = 1; m < K; m++) {

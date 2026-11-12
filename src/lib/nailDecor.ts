@@ -197,7 +197,7 @@ const ring = (n: number, cu: number, ct: number, ru: number, rt: number, r: numb
 
 const DECOR: Record<string, Spec> = {
   // Poinsettia: grosse spitze weisse Blütenblätter + Goldperlen-Cluster (Foto: Mitte des Nagels, fast Nagelbreite)
-  xmas3: { flowers: [{ u: 0.5, t: 0.5, size: 1.65, petals: 6, wide: 0.5, pointed: true, center: "gold5" }] },
+  xmas3: { flowers: [{ u: 0.5, t: 0.5, size: 1.3, petals: 6, wide: 0.5, pointed: true, center: "gold5" }] },
   // 1 Steine am Nagelbett-Bogen (Cuticle)
   strass1: { fill: true, gems: row(12, (k) => { const u = 0.07 + (0.86 * k) / 11; return [u, 0.12 - 0.09 * (2 * u - 1) ** 2]; }, 0.048) },
   // 2 Steine als U um das rosa Nagelbett, offen zur Spitze hin geschlossen durch die weisse Spitze (obere Halbellipse)
