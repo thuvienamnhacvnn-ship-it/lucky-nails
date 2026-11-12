@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, Flower2, Gem, Gift, Circle, Droplets, Hand, LayoutGrid, Sparkles, RotateCcw, ZoomIn } from "lucide-react";
+import { ChevronLeft, ChevronRight, Gem, Circle, Droplets, Hand, LayoutGrid, Sparkles, RotateCcw, ZoomIn } from "lucide-react";
 import * as THREE from "three";
 import { HERO_CATS, heroDesigns, type HeroCat } from "@/config/heroDesigns";
 import { buildNailGeometry, defaultNail } from "@/lib/nailGeometry";
@@ -25,7 +25,7 @@ const T_OUT = 0.5, T_GAP = 0.15, T_IN = 0.6;
 const NP = 160;
 const ZMAX_DESK = 1.2, ZMAX_MOB = 1.8;
 const isMob = () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
-const ICONS: Record<HeroCat, typeof Gem> = { alle: LayoutGrid, french: Hand, glitzer: Sparkles, verlauf: Droplets, marmor: Gem, blumen: Flower2, minimal: Circle, saison: Gift };
+const ICONS: Record<HeroCat, typeof Gem> = { alle: LayoutGrid, french: Hand, glitzer: Sparkles, verlauf: Droplets, minimal: Circle };
 
 type S = { q: THREE.Quaternion; axis: THREE.Vector3; speed: number; touched: boolean };
 const ease = (x: number) => 1 - Math.pow(1 - x, 3);
