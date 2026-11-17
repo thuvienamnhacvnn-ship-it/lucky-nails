@@ -1,7 +1,7 @@
 // Wimpern & Augenbrauen — Preise = Mitbewerber-Preisliste, ab 50 € −5 €, unter 50 € −3 € (Stand 17.11.2026).
 const d = (p: number) => (p >= 50 ? p - 5 : p - 3);
-// Format: "neu|alt" -> Anzeige: alter Preis durchgestrichen, neuer Preis hervorgehoben
-const e = (p: number) => `${d(p)} €|${p} €`;
+// Listenpreis (bereits abgezogen), kein Streichpreis.
+const e = (p: number) => `${d(p)} €`;
 
 type Look = { title: string; sub: string; rows: [string, string][] };
 const look = (title: string, sub: string, neu: number, a2: number, a3: number, a4: number, fremd?: number): Look => ({
