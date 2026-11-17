@@ -90,7 +90,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="section on-dark" aria-labelledby="pl-h">
+      <section className="section on-ivory pl-section" aria-labelledby="pl-h">
         <div className="wrap">
           <SectionHead id="pl-h" eyebrow="Alle Preise in Euro" title={<>Unsere <span className="gold-text">Preisliste</span></>} />
           <PreislisteMenu />
