@@ -1906,3 +1906,10 @@ html.n3d-zoomlock, html.n3d-zoomlock body { overflow: hidden !important; overscr
 /* Performance: unter dem Xmas-Bild liegende Ebenen (Tag/Nacht/Alt-Crossfade 2560px) nicht mehr rendern/animieren */
 .bg-wrap:has(.bg-xmas) > .bg:not(.bg-xmas):not(.bg-xmas-vid), .bg-wrap:has(.bg-xmas) > .bgm:not(.bgm-xmas):not(.bgm-xmas-vid) { display: none !important; }
 .xm-la, .xm-lb { will-change: opacity; }
+
+.pl-addr{margin:6px 0 0;text-align:center;font-size:.95rem;letter-spacing:.08em;color:var(--ink-body)}
+.pl-pp{display:inline-flex;align-items:center;gap:.8em;white-space:nowrap}
+.pl-old{position:relative;display:inline-block;color:#8f7d6c;font-size:.95em;font-weight:600;text-decoration:none;padding:0 .15em}
+.pl-old::after{content:"";position:absolute;left:-.2em;right:-.2em;top:50%;height:2px;background:#d6224c;transform:rotate(-14deg)}
+.pl-new{color:#a8741c;font-weight:800;font-size:1.25em}
+.pl-sl{display:none}
