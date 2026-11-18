@@ -93,7 +93,9 @@ export default function Page() {
       <section className="section on-ivory pl-section" aria-labelledby="pl-h">
         <div className="wrap">
           <SectionHead id="pl-h" eyebrow="Alle Preise in Euro" title={<>Unsere <span className="gold-text">Preisliste</span></>} />
-          <PreislisteMenu />
+          <Suspense fallback={null}>
+            <PreislisteMenu />
+          </Suspense>
         </div>
       </section>
 

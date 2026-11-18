@@ -1,4 +1,5 @@
 import CtaBand from "@/components/CtaBand";
+import LashDesignGrid from "@/components/LashDesignGrid";
 import NailDesignGrid from "@/components/NailDesignGrid";
 import { PgxHero, PgxMarquee } from "@/components/Pgx";
 import { PgxRail } from "@/components/PgxClient";
@@ -24,6 +25,12 @@ export default function Page() {
         <div className="wrap">
           <SectionHead id="nd-h" eyebrow="Nagelmodellage" title="Finde deinen Look" sub="Preise für Neumodellage – Details und echte Arbeiten findest du auf der jeweiligen Seite." />
           <NailDesignGrid price />
+        </div>
+      </section>
+      <section className="section on-dark" style={{ paddingTop: 0 }} aria-labelledby="lash-h">
+        <div className="wrap">
+          <SectionHead id="lash-h" eyebrow="Wimpern & Brauen" title="Dein Wimpern-Look" sub="Von natürlich bis Mega-Volumen – tippe auf eine Kachel für die passende Preisliste." />
+          <LashDesignGrid />
         </div>
       </section>
       <section className="section on-ivory" aria-labelledby="real-h">

@@ -55,3 +55,9 @@ export const priceGroups: PriceGroup[] = [
     ],
   },
 ];
+
+// Tabs der Preisliste (Naegel aus dem Flyer + Wimpern und Brauen).
+export const priceTabs: { id: string; tab: string }[] = [
+  ...priceGroups.map((g) => ({ id: g.id, tab: g.tab })),
+  { id: "wimpern", tab: "Wimpern" },
+];
